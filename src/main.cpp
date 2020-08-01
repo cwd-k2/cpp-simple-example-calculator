@@ -30,7 +30,7 @@ int main (int argc, char* argv[]) {
   sol::state lua;
   lua.open_libraries (sol::lib::base, sol::lib::package);
 
-  for (auto s : {
+  for (const auto s : {
     "(", ")", "%", "AC",
     "7", "8", "9", "+",
     "4", "5", "6", "-",
@@ -41,26 +41,33 @@ int main (int argc, char* argv[]) {
 
     fm["ui"] << *btns.back ();
 
-    if (s == "=") {
+    if (s == "=")
       (*btns.back ()).events ().click ([&] {
+
         std::stringstream ss;
         ss << "return " << box.text ();
         box.reset ();
+
         try {
           std::string result = lua.script (ss.str ());
           box.append (result, true);
-        } catch (sol::error) {
+        }
+        catch (sol::error) {
           box.tip_string ("invalid");
         }
+
       });
-    } else if (s == "AC") {
+
+    else if (s == "AC")
       (*btns.back ()).events ().click ([&] {
         box.reset ();
         box.tip_string ("...");
       });
-    } else {
-      (*btns.back ()).events ().click ([&, s] { box.append (s, true); });
-    }
+
+    else
+      (*btns.back ()).events ().click ([&, s] {
+        box.append (s, true);
+      });
 
   }
 
