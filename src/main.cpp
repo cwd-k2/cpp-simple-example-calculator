@@ -18,7 +18,7 @@ int main (int argc, char* argv[]) {
   fm.caption ("My Simple Little Calculator");
   fm.div ("<ui grid=[4,6] collapse(0,0,4,1)>");
 
-  nana::textbox box (fm);
+  nana::textbox box {fm};
   box.borderless (true);
   box.tip_string ("...");
   box.editable (false);
@@ -52,6 +52,7 @@ int main (int argc, char* argv[]) {
           std::string result = lua.script (ss.str ());
           box.append (result, true);
         }
+
         catch (sol::error) {
           box.tip_string ("invalid");
         }
