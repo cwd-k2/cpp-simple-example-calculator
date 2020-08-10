@@ -48,7 +48,7 @@ auto main (int argc, char* argv[]) -> int {
     fm["ui"] << *btns.back ();
 
     if (s == string("="))
-      (*btns.back ()).events ().click ([&] {
+      btns.back ()->events ().click ([&] {
 
         try {
           string result = lua.script ("return " + box.text());
@@ -64,13 +64,13 @@ auto main (int argc, char* argv[]) -> int {
       });
 
     else if (s == string("AC"))
-      (*btns.back ()).events ().click ([&] {
+      btns.back ()->events ().click ([&] {
         box.reset ();
         box.tip_string ("...");
       });
 
     else
-      (*btns.back ()).events ().click ([&, s] {
+      btns.back ()->events ().click ([&, s] {
         box.append (s, true);
       });
 
