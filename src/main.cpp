@@ -11,14 +11,17 @@
 
 #include <sol/sol.hpp>
 
-using std::cout, std::endl;
+using std::cout,
+      std::endl;
 
-int main (int argc, char* argv[]) {
+using std::string;
+
+auto main (int argc, char* argv[]) -> int {
   nana::form fm;
   fm.caption ("My Simple Little Calculator");
   fm.div ("<ui grid=[4,6] collapse(0,0,4,1)>");
 
-  nana::textbox box {fm};
+  nana::textbox box { fm };
   box.borderless (true);
   box.tip_string ("...");
   box.editable (false);
@@ -37,29 +40,30 @@ int main (int argc, char* argv[]) {
     "1", "2", "3", "*",
     ".", "0", "=", "/"
   }) {
-    btns.emplace_back (std::make_unique <nana::button> (fm.handle (), s));
+
+    btns.emplace_back (
+      std::make_unique <nana::button> (fm.handle (), s)
+    );
 
     fm["ui"] << *btns.back ();
 
-    if (s == "=")
+    if (s == string("="))
       (*btns.back ()).events ().click ([&] {
 
-        std::stringstream ss;
-        ss << "return " << box.text ();
-        box.reset ();
-
         try {
-          std::string result = lua.script (ss.str ());
+          string result = lua.script ("return " + box.text());
+          box.reset ();
           box.append (result, true);
         }
 
         catch (sol::error) {
+          box.reset ();
           box.tip_string ("invalid");
         }
 
       });
 
-    else if (s == "AC")
+    else if (s == string("AC"))
       (*btns.back ()).events ().click ([&] {
         box.reset ();
         box.tip_string ("...");

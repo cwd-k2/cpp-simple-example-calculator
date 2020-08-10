@@ -1,5 +1,5 @@
-CXX	= g++
-CXXFLAGS	= -std=c++17
+CXX	= clang++
+CXXFLAGS	= -std=gnu++17
 LIBS	= -lX11 -lXft -lfontconfig -lrt -lpthread -lnana -llua
 LDFLAGS	=
 PROGRAM	= calculator
