@@ -51,7 +51,7 @@ auto main (int argc, char* argv[]) -> int {
       btns.back ()->events ().click ([&] {
 
         try {
-          string result = lua.script ("return " + box.text());
+          string result = lua.script ("return " + box.text ());
           box.reset ();
           box.append (result, true);
         }
