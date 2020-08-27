@@ -1,18 +1,17 @@
 #include <iostream>
-#include <vector>
-#include <string>
 #include <sstream>
+#include <string>
+#include <vector>
 
 #include <nana/gui.hpp>
-#include <nana/gui/widgets/widget.hpp>
+#include <nana/gui/place.hpp>
 #include <nana/gui/widgets/button.hpp>
 #include <nana/gui/widgets/textbox.hpp>
-#include <nana/gui/place.hpp>
+#include <nana/gui/widgets/widget.hpp>
 
 #include <sol/sol.hpp>
 
-using std::cout,
-      std::endl;
+using std::cout, std::endl;
 
 using std::string;
 
@@ -28,11 +27,12 @@ auto main (int argc, char* argv[]) -> int {
 
   fm["ui"] << box;
 
-  std::vector <std::unique_ptr <nana::button>> btns;
+  std::vector<std::unique_ptr<nana::button>> btns;
 
   sol::state lua;
   lua.open_libraries (sol::lib::base, sol::lib::package);
 
+  // clang-format off
   for (const auto s : {
     "(", ")", "%", "AC",
     "7", "8", "9", "+",
@@ -40,16 +40,14 @@ auto main (int argc, char* argv[]) -> int {
     "1", "2", "3", "*",
     ".", "0", "=", "/"
   }) {
+    // clang-format on
 
-    btns.emplace_back (
-      std::make_unique <nana::button> (fm.handle (), s)
-    );
+    btns.emplace_back (std::make_unique<nana::button> (fm.handle (), s));
 
     fm["ui"] << *btns.back ();
 
-    if (s == string("="))
+    if (s == string ("="))
       btns.back ()->events ().click ([&] {
-
         try {
           string result = lua.script ("return " + box.text ());
           box.reset ();
@@ -60,10 +58,9 @@ auto main (int argc, char* argv[]) -> int {
           box.reset ();
           box.tip_string ("invalid");
         }
-
       });
 
-    else if (s == string("AC"))
+    else if (s == string ("AC"))
       btns.back ()->events ().click ([&] {
         box.reset ();
         box.tip_string ("...");
@@ -73,7 +70,6 @@ auto main (int argc, char* argv[]) -> int {
       btns.back ()->events ().click ([&, s] {
         box.append (s, true);
       });
-
   }
 
   fm.collocate ();
